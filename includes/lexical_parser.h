@@ -7,6 +7,9 @@
 #define ARGUMENT_COUNT 10
 #define DELIMETER " "
 
+#define KEY_VALIDATION_SUCCESS 1
+#define KEY_VALIDATION_FAILED -1
+
 typedef struct input_parsed_metadata {
     char command[TOKEN_SIZE];
     int argument_count;
