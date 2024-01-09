@@ -1,6 +1,0 @@
-#ifndef LEXICAL_ANALYSER_H
-#define LEXICAL_ANALYSER_H
-
-#define COMMAND_POSITION 0
-
-#endif

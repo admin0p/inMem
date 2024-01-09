@@ -10,6 +10,7 @@
 
 int main()
 {
+    // initialize the key space and key store for key heaps 
     char user_input[INPUT_SIZE];
     fgets(user_input, INPUT_SIZE, stdin);
     input_controller(user_input);    
