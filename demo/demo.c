@@ -1,103 +1,108 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 
-#define NULL_TERMINATOR '\0'
-
-typedef struct KEY_STORE
+typedef struct SET
 {
+    char key[100];
+    char value[100];
+    struct SET *colliding_key;
+} SET;
 
-    char *key;
-    char *value;
-    struct KEY_STORE *next_colliding_key;
-
-} KEY_STORE;
-
-typedef struct SETS_KEY_SPACE
+typedef struct KEY_SPACE
 {
-
-    KEY_STORE keys_space[1024];
-    int key_count;
-
+    int total_keys;
+    SET *set_key_space[1024];
 } KEY_SPACE;
 
-
-int hash_function(char *str)
+int hash(char *key)
 {
-    unsigned int hash = 5381; // seed value (unsigned to handle larger values)
+    unsigned int hash = 5381;
     int c;
-    for (int i = 0; str[i] != NULL_TERMINATOR; i++)
-    {
-        c = str[i];
 
-        hash = ((hash << 5) + hash) + c;
+    while ((c = *key++))
+    {
+        hash = ((hash << 5) + hash) + c; // hash * 33 + c
     }
 
-    return hash % 1024; // Use %u for printing unsigned integers
+    return hash % 1024;
 }
-
 
 int main()
 {
-    int input;
-    int quit_flag = 0;
 
-    // initialize memory 
+    int option = 4;
+
     KEY_SPACE *key_space = (KEY_SPACE *)malloc(sizeof(KEY_SPACE));
-    key_space->key_count = 0;
+    
+    printf("Please enter the option:\n");
+    printf("1 -> create a SET\n");
+    printf("2 -> get value of a key\n");
+    printf("0 -> exit\n");
 
 
-    char  user_key [10] = "";
-    char  user_value [10] = "";
 
-    printf("Enter your option : \n");
-    printf("1. GET\n");
-    printf("2. SET\n");
-    printf("3. QUIT\n");
-
-    while (quit_flag == 0)
+    while (option != 0)
     {
-        scanf("%d", &input);
-        switch (input)
+        scanf("%d", &option);
+        switch (option)
         {
         case 1:
-            printf("GET\n");
-            printf("enter the key\n");
-            scanf("%s", user_key);
-            printf("entered user key %s \n", user_key);
-            int key_hash_index_get = hash_function(user_key);
-            if(key_space->keys_space[key_hash_index_get].key == NULL){
-                printf("Key not found\n");
-            }else{
-                printf("Key found\n");
-                printf("Key : %s\n", key_space->keys_space[key_hash_index_get].key);
-                printf("Value : %s\n", key_space->keys_space[key_hash_index_get].value);
+            /* code */
+            printf("Please enter the key:\n");
+            char key[100];
+            scanf("%s", key);
+            printf("Please enter the value:\n");
+            char value[100];
+            scanf("%s", value);
+            // create a set
+            SET *new_set = (SET *)malloc(sizeof(SET));
+            strcpy(new_set->key, key);
+            strcpy(new_set->value, value);
+            new_set->colliding_key = NULL;
+            // hash the key
+            int key_hash = hash(key);
+            // check if the key already exists
+            if(key_space->set_key_space[key_hash] == NULL){
+                key_space->set_key_space[key_hash] = new_set;
+            }else {
+                SET *temp = key_space->set_key_space[key_hash];
+                while(temp->colliding_key != NULL){
+                    temp = temp->colliding_key;
+                }
+                temp->colliding_key = new_set;
+                free (temp);
             }
+            key_space->total_keys++;
+
             break;
         case 2:
-            printf("enter the key\n");
-            scanf("%s", user_key);
-            printf("enter the value\n");
-            scanf("%s", user_value);
-            
-            int key_hash_index_set = hash_function(user_key);
-            if(key_space->keys_space[key_hash_index_set].key == NULL){
-                KEY_STORE *new_key_store = (KEY_STORE *)malloc(sizeof(KEY_STORE));
-                new_key_store->key = user_key;
-                new_key_store->value = user_value;
-                new_key_store->next_colliding_key = NULL;
-
-                key_space->keys_space[key_hash_index_set] = *new_key_store;
-                key_space->key_count++;
+            /* code */
+            // get a value of a key
+            printf("Please enter the key:\n");
+            char get_key[100];
+            scanf("%s", get_key);
+            // hash the key
+            int get_key_hash = hash(get_key);
+            // check if the key already exists
+            if(key_space->set_key_space[get_key_hash] == NULL){
+                printf("Key does not exist\n");
+            }else if(key_space->set_key_space[get_key_hash]->colliding_key == NULL){
+                printf("Value of the key is: %s\n", key_space->set_key_space[get_key_hash]->value);
+            } else {
+                for(SET * i = key_space->set_key_space[get_key_hash]; i != NULL; i = i->colliding_key){
+                    if(strcmp(i->key, get_key) == 0){
+                        printf("Value of the key is: %s\n", i->value);
+                        break;
+                    }
+                }
             }
-
             break;
-        case 3:
-            printf("QUIT\n");
-            quit_flag = 1;
-            break;
+        case 0:
+            exit(0);
+            return 1;
         default:
-            printf("Invalid option\n");
             break;
         }
     }
