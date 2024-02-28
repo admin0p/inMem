@@ -1,18 +1,19 @@
-/**
- * This is the main entry file used to handle user inputs
-*/
+#include<stdio.h>  
+#include<stdlib.h>
+#include<string.h>
+#include"controller.h"
+#include"handler.h"
 
-#include <stdio.h>
-#include <string.h>
-#include "../includes/util.h"
-#include "../includes/controller.h"
+int main () {
 
+    int status = 1; //  0 -stopped, >0 - running
 
-int main()
-{
-    // initialize the key space and key store for key heaps 
-    char user_input[INPUT_SIZE];
-    fgets(user_input, INPUT_SIZE, stdin);
-    input_controller(user_input);    
-    return SUCCESS_STATUS; // defined in util.h
+    while(status != 0) {
+        char query[1024*28];
+        fgets(query, 1024*28, stdin);
+        input_controller(query);
+        // printf("Your op: %s", query);
+        status = strcmp(query, "exit\n");
+    }
+    return 0;    
 }
