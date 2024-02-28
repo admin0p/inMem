@@ -79,8 +79,8 @@ int get_key (char * key){
 
     for(SET_SCHEMA * iterator = key_at_index; iterator != NULL; iterator = iterator->colliding_key){
         if(strcmp(iterator->key, key) == 0){
-            printf("key => %s", key);
-            printf("value => %s", iterator->value);
+            printf("key => %s \n", key);
+            printf("value => %s \n", iterator->value);
             return 1;
         }
     }

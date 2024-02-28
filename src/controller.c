@@ -71,7 +71,6 @@ int input_controller (char* user_input) {
     
     int key_id = get_command_key(&input_structure);
     input_handler(key_id, input_structure.arguments[0], input_structure.arguments[1]);
-    printf("Key id: %d\n", key_id);
     return 0;
 }
 
