@@ -7,14 +7,17 @@
 void input_handler(int key_index, char * key, char * value){
 
     switch (key_index){
+        
+        case 0:
+            printf("Exiting ....\n");
+            exit(1);
+            break;
 
         case 1:
-            printf("GET command detected\n");
             get_key(key);
             break;
 
         case 2:
-            printf("SET command detected\n");
             set_key(key, value);
             break;
 
