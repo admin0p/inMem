@@ -72,8 +72,8 @@ int get_key (char * key){
     }
 
     if(strcmp(key_at_index->key, key) == 0){
-        printf("key => %s", key);
-        printf("value => %s", key_at_index->value);
+        printf("key => %s \n", key);
+        printf("value => %s\n", key_at_index->value);
         return 1;
     }
 
