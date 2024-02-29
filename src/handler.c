@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include"set.h"
-#include"handler.h"
+#include"includes/set.h"
+#include"includes/handler.h"
 
 void input_handler(int key_index, char * key, char * value){
 
