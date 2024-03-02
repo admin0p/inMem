@@ -6,7 +6,7 @@
 
 int main () {
 
-    int status = 1; //  0 -stopped, >0 - running
+    int status = 1;
 
     while(status == 1) {
         char query[1024*28];
