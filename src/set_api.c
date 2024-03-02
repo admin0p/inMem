@@ -3,12 +3,40 @@
 #include<string.h>
 #include "includes/set.h"
 
+/**
+ * This file is the main "SET" engine to handle key value pair structures
+ * This manages the memory allocation and deallocation <To be added on key deletion>
+ * This stores the SET structure and SET key space
+ * SET key space is just a hash map that points to the location of the key structure
+*/
+
+/**
+ * @brief
+ * This is the main SET structure that stores the key value
+ * The limits for key size and value size are defined in includes/set.h
+ * key: the key
+ * value: the value associated to the key
+ * colliding_key: on collision of hash indexes for a key the former key points to the location of the later key
+ * sort of like linked list
+ * example:
+ * index->      0           1              2
+ *        [ {SET struct}  {SET struct}  {SET struct} ]
+ *              |
+ *     {colliding SET struct} 
+ *              |
+ *     {colliding SET struct} 
+*/
 typedef struct SET_KEY_SCHEMA {
     char key[KEY_LIMIT];
     char value[VALUE_LIMIT];
     struct SET_KEY_SCHEMA * colliding_key;
 } SET_SCHEMA;
 
+/**
+ * @brief
+ * This is the SET key space
+ * Keeps track of the total keys and assigns keys to their hashed index
+*/
 typedef struct SET_KEY_SPACE {
     int key_count;
     SET_SCHEMA * keys[KEY_SPACE_LIMIT];
@@ -17,8 +45,9 @@ typedef struct SET_KEY_SPACE {
 
 static SET_KEY_SPACE * key_space_ptr = NULL;
 
-//hashing function 
-
+/**
+ * Function to get hashed index to the key
+*/
 int hash (char * key) {
     int hash = 5381;
     int c;
@@ -28,8 +57,11 @@ int hash (char * key) {
     return hash % 1024;
 }
 
-// api to set key 
-
+/**
+ * @brief
+ * API function to create a key_value set in memory <HEAP>
+ * This creates a SET structure in memory <HEAP> and also populate the SET key_space 
+*/
 int set_key (char * key, char * value) {
         
     SET_SCHEMA * new_set = (SET_SCHEMA *) malloc(sizeof(SET_SCHEMA));
@@ -62,6 +94,10 @@ int set_key (char * key, char * value) {
 
 }
 
+/**
+ * @brief
+ * This function retrieves the value associated to a key 
+*/
 int get_key (char * key){
 
     int hash_index = hash(key);

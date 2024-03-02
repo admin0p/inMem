@@ -4,6 +4,11 @@
 #include"includes/set.h"
 #include"includes/handler.h"
 
+/**
+ * @brief
+ * This function just gets the index of the key calculate in controller.c and input_skeleton to process the arguments
+ * Just a switch statement to handle the ops for the command
+*/
 void input_handler(int key_index, input_skeleton * input){
 
     switch (key_index){
