@@ -3,18 +3,8 @@
 #include<string.h>
 #include"includes/controller.h"
 #include"includes/handler.h"
+#include "includes/input_controller.h"
 
-typedef struct input_skeleton {
-    char command[1000];
-    int argument_count;
-    char arguments[20][1024 * 2]; 
-} input_skeleton;
-
-typedef struct command_schema {
-    char command[1000];
-    int argument_count;
-    int command_index; 
-} command_schema;
 
 const command_schema COMMANDS[20] = {
     {"GET", 1, 1},
@@ -70,7 +60,7 @@ int input_controller (char* user_input) {
     }
     
     int key_id = get_command_key(&input_structure);
-    input_handler(key_id, input_structure.arguments[0], input_structure.arguments[1]);
+    input_handler(key_id, &input_structure);
     return 0;
 }
 

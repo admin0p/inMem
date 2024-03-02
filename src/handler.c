@@ -4,7 +4,7 @@
 #include"includes/set.h"
 #include"includes/handler.h"
 
-void input_handler(int key_index, char * key, char * value){
+void input_handler(int key_index, input_skeleton * input){
 
     switch (key_index){
         
@@ -14,11 +14,11 @@ void input_handler(int key_index, char * key, char * value){
             break;
 
         case 1:
-            get_key(key);
+            get_key(input->arguments[0]);
             break;
 
         case 2:
-            set_key(key, value);
+            set_key(input->arguments[0], input->arguments[1]);
             break;
 
         default:

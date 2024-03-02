@@ -4,14 +4,14 @@
 #include "includes/set.h"
 
 typedef struct SET_KEY_SCHEMA {
-    char key[1000];
-    char value[1024*4];
+    char key[KEY_LIMIT];
+    char value[VALUE_LIMIT];
     struct SET_KEY_SCHEMA * colliding_key;
 } SET_SCHEMA;
 
 typedef struct SET_KEY_SPACE {
     int key_count;
-    SET_SCHEMA * keys[1024];
+    SET_SCHEMA * keys[KEY_SPACE_LIMIT];
 
 } SET_KEY_SPACE;
 
