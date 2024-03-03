@@ -54,7 +54,7 @@ int hash (char * key) {
     while (c = *key++) {
         hash = ((hash << 5) + hash) + c;
     }
-    return hash % 1024;
+    return hash % KEY_SPACE_LIMIT;
 }
 
 /**
