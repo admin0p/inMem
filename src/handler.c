@@ -23,7 +23,12 @@ void input_handler(int key_index, input_skeleton * input){
             break;
 
         case 2:
-            set_key(input->arguments[0], input->arguments[1]);
+            int ack = set_key(input->arguments[0], input->arguments[1]);
+            printf("set_ack: %d \n", ack);
+            break;
+        
+        case 3:
+            get_key_info(input->arguments[0]);
             break;
 
         default:

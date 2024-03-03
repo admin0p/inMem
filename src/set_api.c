@@ -79,6 +79,7 @@ int set_key (char * key, char * value) {
     if(key_space_ptr->keys[hash_index] == NULL) {
         key_space_ptr->keys[hash_index] = new_set;
         key_space_ptr->key_count++;
+        return 1;
     }
     
     SET_SCHEMA * existing_key = key_space_ptr->keys[hash_index];
@@ -98,29 +99,68 @@ int set_key (char * key, char * value) {
  * @brief
  * This function retrieves the value associated to a key 
 */
-int get_key (char * key){
+void get_key (char * key){
 
     int hash_index = hash(key);
     SET_SCHEMA * key_at_index = key_space_ptr->keys[hash_index];
     if(key_at_index == NULL){
         printf("Could not find the key!!");
-        return 0;
+        return;
     }
 
     if(strcmp(key_at_index->key, key) == 0){
-        printf("key => %s \n", key);
-        printf("value => %s\n", key_at_index->value);
-        return 1;
+        printf("key: %s \n", key);
+        printf("value: %s\n", key_at_index->value);
+        return;
     }
 
     for(SET_SCHEMA * iterator = key_at_index; iterator != NULL; iterator = iterator->colliding_key){
         if(strcmp(iterator->key, key) == 0){
-            printf("key => %s \n", key);
-            printf("value => %s \n", iterator->value);
-            return 1;
+            printf("key: %s \n", key);
+            printf("value: %s \n", iterator->value);
+            return;
         }
     }
 
-    printf("Could not find the key!!");
-    return 0;
+    printf("Could not find the key!! \n");
+    return;
+}
+
+/**
+ * @brief
+ * This function gets the info of the key
+ * key
+ * at which heap address is the key stored of the program's address space
+ * number of colliding hops for the key
+ * the hash number for the key 
+*/
+void get_key_info (char * key) {
+
+    int hash_index = hash(key);
+    int colliding_hash_hops = 0;
+    SET_SCHEMA * key_at_index = key_space_ptr->keys[hash_index];
+
+    if(strcmp(key, key_at_index->key) == 0){
+
+        printf("key: %s \n", key);
+        printf("at_address: %p \n", key_at_index);
+        printf("colliding_hash_hops %d \n", colliding_hash_hops);
+        printf("key_hash: %d\n", hash_index);
+
+        return;
+    }
+
+    for (SET_SCHEMA * ptr = key_at_index; ptr != NULL; ptr = ptr->colliding_key){
+        colliding_hash_hops ++;
+        if(strcmp(key, ptr->key) == 0){
+             printf("key: %s \n", key);
+            printf("at_address: %p \n", key_at_index);
+            printf("colliding_hash_hops %d \n", colliding_hash_hops);
+            printf("key_hash: %d\n", hash_index);
+            return;
+        }
+    }
+
+    printf("Could not find the key!! \n");
+
 }

@@ -10,11 +10,13 @@
  * This is the command store 
  * All valid commands are stored here
  * refer to input_controller.h for the structure definition
+ * command, argument_count, command_index_number
 */
 const command_schema COMMANDS[20] = {
     {"GET", 1, 1},
     {"SET", 2, 2},
-    {"exit", 0, 0}
+    {"exit", 0, 0},
+    {"INFO", 1, 3}
 };
 
 int get_command_key(input_skeleton *input);

@@ -9,6 +9,8 @@ int hash(char * key);
 
 int set_key (char * key, char * value);
 
-int get_key (char * key);
+void get_key (char * key);
+
+void get_key_info (char * key);
 
 #endif
