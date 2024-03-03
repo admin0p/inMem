@@ -1,10 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include"set.h"
-#include"handler.h"
+#include"includes/set.h"
+#include"includes/handler.h"
 
-void input_handler(int key_index, char * key, char * value){
+/**
+ * @brief
+ * This function just gets the index of the key calculate in controller.c and input_skeleton to process the arguments
+ * Just a switch statement to handle the ops for the command
+*/
+void input_handler(int key_index, input_skeleton * input){
 
     switch (key_index){
         
@@ -14,11 +19,11 @@ void input_handler(int key_index, char * key, char * value){
             break;
 
         case 1:
-            get_key(key);
+            get_key(input->arguments[0]);
             break;
 
         case 2:
-            set_key(key, value);
+            set_key(input->arguments[0], input->arguments[1]);
             break;
 
         default:

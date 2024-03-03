@@ -1,21 +1,16 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include"controller.h"
-#include"handler.h"
+#include"includes/controller.h"
+#include"includes/handler.h"
+#include "includes/input_controller.h"
 
-typedef struct input_skeleton {
-    char command[1000];
-    int argument_count;
-    char arguments[20][1024 * 2]; 
-} input_skeleton;
-
-typedef struct command_schema {
-    char command[1000];
-    int argument_count;
-    int command_index; 
-} command_schema;
-
+/**
+ * @brief
+ * This is the command store 
+ * All valid commands are stored here
+ * refer to input_controller.h for the structure definition
+*/
 const command_schema COMMANDS[20] = {
     {"GET", 1, 1},
     {"SET", 2, 2},
@@ -24,9 +19,18 @@ const command_schema COMMANDS[20] = {
 
 int get_command_key(input_skeleton *input);
 
+/**
+ * @brief
+ * This function breaks the input string into command and arguments and assigns to a structure input_skeleton
+ * (refer to input_controller.h for the structure definition)
+ * LOGIC:
+ * 1. parse the string till a white space is encountered, the first word is the command and store it in the input_skeleton structure
+ * 2. Repeat the process for the arguments and store them in a 2d array of the input_skeleton structure
+ * Once done the get_command_key function is called to get the key index of the command
+ * Then the input_handler function is called to handle the command
+*/
 int input_controller (char* user_input) {
 
-    // parse and bearkdown the string to a 2d array
     int command_counter = 0;
     int  argument_counter = 0;
     int command_length = 0;
@@ -70,11 +74,16 @@ int input_controller (char* user_input) {
     }
     
     int key_id = get_command_key(&input_structure);
-    input_handler(key_id, input_structure.arguments[0], input_structure.arguments[1]);
-    printf("Key id: %d\n", key_id);
+    input_handler(key_id, &input_structure);
     return 0;
 }
 
+/**
+ * @brief
+ * This function compares the command in input_skeleton with the command store and returns the index of the command
+ * if the command is not found, it returns -1 with a message
+ * @param input_skeleton *input 
+*/
 int get_command_key(input_skeleton *input){
 
     for (int i = 0; i < 20; i++)
