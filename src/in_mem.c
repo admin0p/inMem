@@ -15,15 +15,7 @@
  * max size of the command is 1024*28 bytes -> 28kb -> allocated on the stack
  * change the function name and add it to server
 */
-int in_meme_entry (char * query) {
-
-    printf("inMem=>"); // prompt
-    input_controller(query);
-    
-    return 0;    
-}
-
-void in_mem_2 (int pipeId[2]) {
+void in_mem_entry (int pipeId[2]) {
 
     close(pipeId[1]); // close the write end of the pipe
 
