@@ -15,6 +15,7 @@ void input_handler(int key_index, input_skeleton * input){
         
         case 0:
             printf("Exiting ....\n");
+            exit(0);
             break;
 
         case 1:

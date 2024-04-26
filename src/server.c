@@ -10,6 +10,7 @@
 #include<pthread.h>
 
 #include"includes/inMem.h"
+#include"includes/network.h"
 
 #define PORT 1229
 #define MAX_CONNECTION_IN_LISTEN_QUEUE 5
@@ -19,6 +20,19 @@
 void * handle_accepted_clients (void * args); 
 
 int main ( ) {
+    // initialize pipe
+    int pipe_fds[2];
+    int pipe_status = pipe(pipe_fds);
+    if(pipe_status < 0){
+        printf("Failed to initialize pipe -- Terminating!!");
+        return -1;
+    }
+    // fork the process
+    int fork_status = fork();
+    if(fork_status == 0){
+        in_mem_2(pipe_fds);
+        return 0;
+    }
 
     // initialize socket
     int server_sock_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -60,7 +74,13 @@ int main ( ) {
         char client_IP[INET_ADDRSTRLEN];  
         inet_ntop(AF_INET, &(new_client.sin_addr), client_IP, INET_ADDRSTRLEN);
         printf("new client connected - %s \n", client_IP);
-        pthread_create(&new_thread, NULL, handle_accepted_clients, (void *)&new_client_fd);
+
+        REQ_H_OBJ new_req_obj;
+        new_req_obj.client_fd = new_client_fd;
+        new_req_obj.pipe_fds[0] = pipe_fds[0]; // read end of the pipe
+        new_req_obj.pipe_fds[1] = pipe_fds[1]; // write end of the pipe
+
+        pthread_create(&new_thread, NULL, handle_accepted_clients, (void *)&new_req_obj);
         pthread_detach(new_thread);
     }
 
@@ -69,24 +89,29 @@ int main ( ) {
 }
 
 void * handle_accepted_clients (void * args) {
-    int client_fd = *(int *)args;
+    REQ_H_OBJ request_handler_object = *(REQ_H_OBJ *)args;
+    int client_fd = request_handler_object.client_fd;
+
     char send_message[1028] = "server ack :0 \n";
 
     while (1) {
         char rec_buffer[1028];
-        int rec_status = recv(client_fd, rec_buffer, sizeof(rec_buffer), 0);
+        
+        CLIENT_REQUEST client_request;
+
+        int rec_status = recv(client_fd, client_request.query, sizeof(client_request.query), 0);
         if (rec_status < 0) {
             printf("Failed to read from fd, receive failed");
             return NULL;
         }
-        printf("received = %s \n", rec_buffer);
-        if( strcmp(rec_buffer, "exit\n") == 0 ){
+        printf("received = %s \n", client_request.query);
+        if( strcmp(client_request.query, "exit\n") == 0 ){
             printf("disconnecting client... \n");
             close(client_fd);
             return NULL;
         }
-
-        in_meme_entry (rec_buffer);
+        write(request_handler_object.pipe_fds[1], &client_request, sizeof(CLIENT_REQUEST));
+        // in_meme_entry (client_request.query);
         int send_status = send(client_fd, send_message, sizeof(send_message), 0);
     }
 
