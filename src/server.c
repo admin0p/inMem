@@ -30,7 +30,7 @@ int main ( ) {
     // fork the process
     int fork_status = fork();
     if(fork_status == 0){
-        in_mem_2(pipe_fds);
+        in_mem_entry(pipe_fds);
         return 0;
     }
 
