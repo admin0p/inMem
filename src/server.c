@@ -88,6 +88,15 @@ int main ( ) {
     return 0;
 }
 
+/**
+ * Function to handle accepted connection from clients
+ * Each connection is handled in a separate thread
+ * @param args : REQ_H_OBJ object
+ * flow :
+ *  1. read from the client
+ *  2. write to the pipe
+ *  Handle the query send by the user in the forked engine
+*/
 void * handle_accepted_clients (void * args) {
     REQ_H_OBJ request_handler_object = *(REQ_H_OBJ *)args;
     int client_fd = request_handler_object.client_fd;
