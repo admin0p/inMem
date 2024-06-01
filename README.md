@@ -43,9 +43,10 @@ Input >> | main.c | -> | controller.c | -> | handler.c | -> [ | *_api.c | ]
 
 ## To-Do List
 
-- [ ] Implement a Makefile for easier build processes.
+- [Done] Implement a Makefile for easier build processes.
+- [ ] Stream the output to the respective client. 
 - [ ] Extend API functionalities for the SET data type.
-- [ ] Add support for network connections and handling concurrent requests.
+- [Done ] Add support for network connections and handling concurrent requests.
 - [ ] Introduce multiple APIs for various data structures:
   - Lists
   - Hashed sets
